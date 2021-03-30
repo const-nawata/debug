@@ -1,9 +1,13 @@
-<IfModule mod_rewrite.c>
-	Options -MultiViews
+options +FollowSymLinks
+IndexIgnore */*
+RewriteEngine on
 
-	RewriteEngine On
-#	RewriteBase /path/to/app
-	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteRule ^ index.php [QSA,L]
-</IfModule>
+# Перенаправление с ДОМЕН на ДОМЕН/api
+RewriteCond %{REQUEST_URI} ^/$
+RewriteRule ^(.*)$ /api/$1 [R=301]
+
+#Если URI начинается с api/ то перенаправлять все запросы на index.php
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/(.*)$ /index.php
